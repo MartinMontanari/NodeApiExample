@@ -1,6 +1,7 @@
 import CommonRoutes from "./common.routes";
 import {Application, Request, Response} from "express";
 import shortid from "shortid";
+import {log} from 'debug';
 
 export default class UserRoutes extends CommonRoutes{
     private users : any[];
@@ -18,6 +19,7 @@ export default class UserRoutes extends CommonRoutes{
         });
 
         this.app.post('/users', (req: Request, res: Response) => {
+            log(req.body);
             const user = req.body;
 
             if(!user.email || !user.password) {
