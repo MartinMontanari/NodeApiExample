@@ -1,14 +1,15 @@
 import express from 'express';
 import cors from 'express';
-import UserRoutes from "./routes/user.routes";
-import CommonRoutes from "./routes/common.routes";
-import {log} from "winston";
+import {log} from 'debug';
+import CommonRoutes from './routes/common.routes';
+import UserRoutes from './routes/user.routes';
 
 const app = express();
 
 const routes: Array<CommonRoutes> = [];
 app.use(cors());
 app.use(express.json());
+
 
 routes.push(new UserRoutes(app));
 
