@@ -8,6 +8,7 @@ export default class UserRoutes extends CommonRoutes{
     constructor(app: Application) {
         super(app, 'User');
         this.users = [];
+        this.setUpRoutes();
     }
 
     setUpRoutes(){
@@ -19,7 +20,7 @@ export default class UserRoutes extends CommonRoutes{
         this.app.post('/users', (req: Request, res: Response) => {
             const user = req.body;
 
-            if(!user.email && user.password) {
+            if(!user.email || !user.password) {
                 return res.status(400).json('Email or password missing.');
             }
             user.id = shortid.generate();
