@@ -3,7 +3,7 @@ import {Application, Request, Response} from "express";
 import shortid from "shortid";
 import {log} from 'debug';
 
-export default class UserRoutes extends CommonRoutes{
+class UserRoutes extends CommonRoutes{
     private users : any[];
 
     constructor(app: Application) {
@@ -12,8 +12,7 @@ export default class UserRoutes extends CommonRoutes{
         this.setUpRoutes();
     }
 
-    setUpRoutes(){
-
+    setUpRoutes() : Application{
         this.app.get('/users', (_req: Request, res: Response) => {
             return res.json({users: this.users });
         });
@@ -32,11 +31,11 @@ export default class UserRoutes extends CommonRoutes{
 
         this.app.put('/users/:id', (req: Request, res: Response) => {
             if(!req.params.id){
-                return res.status(404).json({message: 'Id must be required.'})
+                return res.status(404).json({message: 'User id must be provided'})
             }
 
-            const id = req.params.id;
-            const user = this.users.find(u => u.id === id);
+            const userId = req.params.id;
+            const user = this.users.find(u => u.id === userId);
 
             if(!user){
                 return res.status(404).json({message: 'User not found.'});
@@ -51,6 +50,23 @@ export default class UserRoutes extends CommonRoutes{
 
             return res.status(200).json({message: `User ${user.id} has been updated successfully.`});
         });
+
+        this.app.delete('/users/:id',(req: Request, res: Response) => {
+            if(!req.params.id){
+                return res.status(404).json({message: 'User id must be provided.'});
+            }
+            const userId = req.params.id;
+            const user = this.users.find(u => u.id === userId);
+            if(!user){
+                return res.status(404).json({message: 'User not found.'});
+            }
+            this.users = this.users.filter(u => u.id !== userId);
+
+            return res.status(200);
+        });
+
         return this.app;
     }
 }
+
+export default UserRoutes;
